@@ -46,20 +46,19 @@ public class Main {
 		PPMReaderWriter ppmRW = new PPMReaderWriter();
 		int tab[][][];
 		tab = ppmRW.readPPMFile(args[0]);
-		
-		for (int[][] is : tab) {
+		int c = 0;
+		for (int[][] is : tab) {  // R G B
 			
-			for (int[] is2 : is) {
+			for (int[] is2 : is) {   //
 				
 				for (int i : is2) {
-					System.out.println(i);
-					
+					 System.out.println(i);
+
 				}
 				
-				
+
 			}
-			System.out.println("length : " + tab.length);
-			break;
+			
 		}
 	}
 }

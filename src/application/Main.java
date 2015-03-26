@@ -41,5 +41,25 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
+		System.out.println(args[0]);
+		
+		PPMReaderWriter ppmRW = new PPMReaderWriter();
+		int tab[][][];
+		tab = ppmRW.readPPMFile(args[0]);
+		
+		for (int[][] is : tab) {
+			
+			for (int[] is2 : is) {
+				
+				for (int i : is2) {
+					System.out.println(i);
+					
+				}
+				
+				
+			}
+			System.out.println("length : " + tab.length);
+			break;
+		}
 	}
 }

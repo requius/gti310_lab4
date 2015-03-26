@@ -1,4 +1,4 @@
-package gti310.tp4;
+package application;
 
 /**
  * The Main class is where the different functions are called to either encode
@@ -6,7 +6,7 @@ package gti310.tp4;
  * into PPM format. It is the implementation of the simplified JPEG block 
  * diagrams.
  * 
- * @author François Caron
+ * @author Francois Caron
  */
 public class Main {
 

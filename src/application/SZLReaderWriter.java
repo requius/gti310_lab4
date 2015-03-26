@@ -1,4 +1,4 @@
-package gti310.tp4;
+package application;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11,9 +11,9 @@ import java.io.IOException;
 /**
  * The SZLReaderWriter class writes and reads SZL files. The SZL format is a
  * private format of file: it is only used in the context of the GTI310 course
- * at the ÉTS.
+ * at the ETS.
  * 
- * @author François Caron
+ * @author Francois Caron
  */
 public class SZLReaderWriter {	
 	/*

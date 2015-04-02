@@ -47,14 +47,25 @@ public class Main {
 		int tab[][][];
 		tab = ppmRW.readPPMFile(args[0]);
 		
-		for (int[][] is : tab) {
-			for (int[] is2 : is) {
-				for (int i : is2) {
-					System.out.println(i);
-				}
-				break;
+		int compteur = 0;
+		
+		int[][] test = new int[][]{{200,202,189,188,189,175,175,175},
+					{200,203,190,188,189,182,178,175},
+					{203,200,200,195,200,187,185,175},
+					{200,200,200,200,197,187,187,187},
+					{200,205,200,200,195,188,187,175},
+					{200,200,200,200,200,190,187,175},
+					{205,200,199,200,191,187,187,175},
+					{210,200,200,200,188,185,187,186}};
+		
+		DiscretCosTrans dct = new DiscretCosTrans();
+		int[][] retour = dct.DCT(test);
+		
+		for (int[] is : retour) {
+			for (int i : is) {
+				System.out.println(compteur++ + " - " + i);
+				
 			}
-			break;
 		}
 
 	}

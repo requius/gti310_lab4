@@ -47,15 +47,15 @@ public class Main {
 		int tab[][][];
 		tab = ppmRW.readPPMFile(args[0]);
 		
-		DiscretCosTrans DCT = new DiscretCosTrans();
-		
-		int[][][][][] test = DCT.decoupage(tab, 8);
-		
-		System.out.println(test.length);
-		System.out.println(test[0].length);
-		System.out.println(test[0][0].length);
-		System.out.println(test[0][0][0].length);
-		System.out.println(test[0][0][0][0].length);
+		for (int[][] is : tab) {
+			for (int[] is2 : is) {
+				for (int i : is2) {
+					System.out.println(i);
+				}
+				break;
+			}
+			break;
+		}
 
 	}
 }

@@ -49,7 +49,8 @@ public class Main {
 		
 		int compteur = 0;
 		
-		int[][] test = new int[][]{{200,202,189,188,189,175,175,175},
+		int[][] test = new int[][]{
+					{200,202,189,188,189,175,175,175},
 					{200,203,190,188,189,182,178,175},
 					{203,200,200,195,200,187,185,175},
 					{200,200,200,200,197,187,187,187},
@@ -78,12 +79,17 @@ public class Main {
 				{22,35,38,48,51,57,60,62},
 				{36,37,49,50,58,59,63,64},
 		};
+				
 		Zigzag zig = new Zigzag();
+		zig.inverseZigzager();
+		
+		/*
 		int tab2[] = zig.zigzager(test2);
+		
 		
 		for (int i : tab2) {
 			System.out.println(i);
 		}
-		
+		*/
 	}
 }

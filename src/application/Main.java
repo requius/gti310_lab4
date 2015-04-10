@@ -1,5 +1,10 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 /**
  * The Main class is where the different functions are called to either encode
  * a PPM file to the Squeeze-Light format or to decode a Squeeze-Ligth image
@@ -79,10 +84,31 @@ public class Main {
 				{22,35,38,48,51,57,60,62},
 				{36,37,49,50,58,59,63,64},
 		};
-				
+		int[] test3 = new int[]{
+			96,6,-1,-1,0,-1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	
+		};
+		int[] test4 = new int[]{
+				155,6,-1,-1,0,-1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	
+			};
 		Zigzag zig = new Zigzag();
-		zig.inverseZigzager();
+		//zig.inverseZigzager();
+		zig.DCPM(test3);
+		zig.DCPM(test4);
 		
+		int[] dc = zig.getDC();
+		
+		for (int i : dc) {
+			System.out.println(i);
+		}
+		
+		List<String> list = new ArrayList<String>();
+		list = zig.RLC(test3);
+		
+		/*
+		for (String string : list) {
+			System.out.println(string);
+		}
+		*/
 		/*
 		int tab2[] = zig.zigzager(test2);
 		

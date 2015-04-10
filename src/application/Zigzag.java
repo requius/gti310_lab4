@@ -1,7 +1,7 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class Zigzag {
 
@@ -16,12 +16,11 @@ public class Zigzag {
 	private int[] tabZigzag = new int[64];
 	private int[] dc = new int[32*32];
 	private int compteur = 0;
-	
+
 	public int[] zigzager(int[][] imageEntree){
 		
 		for (int i = 0; i < tabZigzag.length; i++) {
-			tabZigzag[i] = imageEntree[ORDRE_X[i]][ORDRE_Y[i]];
-			
+			tabZigzag[i] = imageEntree[ORDRE_X[i]][ORDRE_Y[i]];		
 		}
 		
 		return tabZigzag; 
@@ -42,16 +41,39 @@ public class Zigzag {
 	
 	}
 	
-	public void DCPM(int[][] imageEntree){
-		dc[compteur] = imageEntree[0][0];
+	public void DCPM(int[] imageZigzag){
+		if (compteur != 0){
+			dc[compteur] = imageZigzag[0]-dc[compteur-1];
+			compteur++;
+		} else {
+			dc[compteur++] = imageZigzag[0];
+		}
 	}
 	
 	public void IDCPM(){
 		
 	}
 	
-	public void RLC(){
+	public int[] getDC(){
+		return dc;
+	}
+	
+	public List<String> RLC(int[] imageZigzag){
+		List<String> coefAC = new ArrayList<String>();
+		int runLength = 0;
 		
+		for (int i = 1; i < imageZigzag.length; i++) {
+			if (imageZigzag[i] != 0) {
+				coefAC.add(runLength + "," + imageZigzag[i]);
+				runLength = 0;
+			} else {
+				runLength++;
+			}
+		}
+		if (imageZigzag[imageZigzag.length-1] == 0)
+			coefAC.add("EOB");
+			
+		return coefAC;
 	}
 	
 	public void IRLC(){

@@ -1,6 +1,8 @@
 package application;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.text.html.HTMLDocument.Iterator;
@@ -46,13 +48,21 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
-		System.out.println(args[0]);
+		
+		int facteurQ = Integer.parseInt(args[0]);
+		String fichierAEncoder = args[1]; 
+		String fichierCompresse= args[2]; 
 		
 		PPMReaderWriter ppmRW = new PPMReaderWriter();
-		int tab[][][];
-		tab = ppmRW.readPPMFile(args[0]);
 		
-		int compteur = 0;
+		int tab[][][];
+		tab = ppmRW.readPPMFile(fichierAEncoder);
+		int hauteur = tab[0].length;
+		int largeur = tab[0][0].length;
+		
+		int hauteurPar8 = hauteur / 8;
+		int largeurPar8 = largeur / 8;
+		
 		
 		int[][] test = new int[][]{
 					{200,202,189,188,189,175,175,175},
@@ -63,6 +73,115 @@ public class Main {
 					{200,200,200,200,200,190,187,175},
 					{205,200,199,200,191,187,187,175},
 					{210,200,200,200,188,185,187,186}};
+		
+		
+		
+		Conversion conversion = new Conversion();
+		DiscretCosTrans dct = new DiscretCosTrans();
+		
+		int[][][] imageYCbCr = conversion.conversionRGBaYCbCr(tab, hauteur, largeur);
+
+		int[][][][][] imageEnBloc = dct.decoupage(imageYCbCr, hauteurPar8, largeurPar8);
+		
+		int[][][][][] imageDCT = new int[3][hauteurPar8][largeurPar8][8][8];
+		
+		for (int i = 0; i < imageEnBloc.length; i++) {
+			for (int j = 0; j < imageEnBloc[i].length; j++) {
+				for (int k = 0; k < imageEnBloc[i][j].length; k++) {
+					imageDCT[i][j][k] = dct.DCT(imageEnBloc[i][j][k]);
+				}
+			} 
+		}
+		System.out.println("DCT!");		
+		
+		Quantification quantification = new Quantification();
+		int[][][][][] imageQuantifie = new int[3][hauteurPar8][largeurPar8][8][8];
+		for (int i = 0; i < imageDCT.length; i++) {
+			for (int j = 0; j < imageDCT[i].length; j++) {
+				for (int k = 0; k < imageDCT[i][j].length; k++) {
+					imageQuantifie[i][j][k] = quantification.quantifier(imageDCT[i][j][k], facteurQ, i);
+				}
+			}
+		}
+		System.out.println("Quantification");
+	
+		
+		Zigzag zigzag = new Zigzag();
+		
+		int[][][][] listeZigzage = new int[3][hauteurPar8][largeurPar8][hauteurPar8 * largeurPar8]; 
+		int[]temp = new int[hauteurPar8 * largeurPar8];
+		int c = 0;
+		int[][] coefficientDC = new int[3][hauteurPar8 * largeurPar8];
+		
+		for (int i = 0; i < imageQuantifie.length; i++) {
+			Arrays.fill(temp, 0);
+			for (int j = 0; j < imageQuantifie[i].length; j++) {
+				for (int k = 0; k < imageQuantifie[i][j].length; k++) {
+					listeZigzage[i][j][k] = zigzag.zigzager(imageQuantifie[i][j][k]);
+					// coefficents de DC
+					if (c != 0){
+						if (j != 0 && k == 0)
+							temp[c] = imageQuantifie[i][j][k][0][0] - imageQuantifie[i][j-1][largeurPar8-1][0][0] ;
+						else
+							temp[c] = imageQuantifie[i][j][k][0][0] - imageQuantifie[i][j][k-1][0][0] ;
+						c++;
+					} else {
+						
+						temp[c++] = imageQuantifie[i][j][k][0][0];
+					}
+				}
+			}
+			
+			c = 0;
+			coefficientDC[i] = temp;
+
+		}
+		System.out.println("Zigag!");
+		System.out.println("Coefficient DC!");
+		
+		String[][][][] coefficientAC = new String[3][hauteurPar8][largeurPar8][64];
+		
+		for (int i = 0; i < listeZigzage.length; i++) {
+			for (int j = 0; j < listeZigzage[i].length; j++) {
+				for (int k = 0; k < listeZigzage[i][j].length; k++) {
+					coefficientAC[i][j][k] = zigzag.RLC(listeZigzage[i][j][k]);
+				}
+			}
+		}
+		System.out.println("Coefficient AC!");
+		
+		
+		
+		/*
+			for (int j = 0; j < coefficientDC[0].length; j++) {
+				System.out.println(coefficientDC[0][j]);
+			}
+		*/
+		
+		
+		/*
+		
+		for (int i = 0; i < listeZigzage.length; i++) {
+			for (int j = 0; j < listeZigzage[i].length; j++) {
+				for (int k = 0; k < listeZigzage[i][j].length; k++) {
+					zigzag.DCPM(listeZigzage[i][j][k]);
+				}
+			}
+			coefficientDC[i] = zigzag.getDC();
+			zigzag.viderListeDC();
+			zigzag.viderCompteur();
+			break;
+		}
+	
+		
+		
+			for (int j = 0; j < 5; j++) {
+				System.out.println(coefficientDC[0][j]);
+			}
+				
+
+		
+		*/
 		/*
 		DiscretCosTrans dct = new DiscretCosTrans();
 		int[][] retour = dct.DCT(test);
@@ -74,7 +193,7 @@ public class Main {
 			}
 		}
 	*/
-		int[][] test2 = new int[][]{
+		/*int[][] test2 = new int[][]{
 				{1,2,6,7,15,16,28,29},
 				{3,5,8,14,17,27,30,43},
 				{4,9,13,18,26,31,42,44},
@@ -84,25 +203,14 @@ public class Main {
 				{22,35,38,48,51,57,60,62},
 				{36,37,49,50,58,59,63,64},
 		};
-		int[] test3 = new int[]{
-			96,6,-1,-1,0,-1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	
-		};
-		int[] test4 = new int[]{
-				155,6,-1,-1,0,-1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0	
-			};
-		Zigzag zig = new Zigzag();
+
+
 		//zig.inverseZigzager();
-		zig.DCPM(test3);
-		zig.DCPM(test4);
-		
-		int[] dc = zig.getDC();
-		
-		for (int i : dc) {
+
+		int[] test1 = zigzag.zigzager(test2);
+		for (int i : test1) {
 			System.out.println(i);
 		}
-		
-		List<String> list = new ArrayList<String>();
-		list = zig.RLC(test3);
 		
 		/*
 		for (String string : list) {

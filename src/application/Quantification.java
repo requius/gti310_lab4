@@ -13,6 +13,7 @@ public class Quantification {
 			{72,92,95,98,112,100,103,95}
 	};
 	
+	//Qb est pareille a Qc 
 	private int[][] Qc = new int[][]{
 			{17,40,40,95,95,95,95,95},
 			{40,40,40,95,95,95,95,95},

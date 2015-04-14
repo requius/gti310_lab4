@@ -48,7 +48,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Squeeze Light Media Codec !");
-		
+
 		int facteurQ = Integer.parseInt(args[0]);
 		String fichierAEncoder = args[1]; 
 		String fichierCompresse= args[2]; 
@@ -57,13 +57,14 @@ public class Main {
 		
 		int tab[][][];
 		tab = ppmRW.readPPMFile(fichierAEncoder);
+
 		int hauteur = tab[0].length;
 		int largeur = tab[0][0].length;
 		
 		int hauteurPar8 = hauteur / 8;
 		int largeurPar8 = largeur / 8;
 		
-		
+		/*
 		int[][] test = new int[][]{
 					{200,202,189,188,189,175,175,175},
 					{200,203,190,188,189,182,178,175},
@@ -74,7 +75,7 @@ public class Main {
 					{205,200,199,200,191,187,187,175},
 					{210,200,200,200,188,185,187,186}};
 		
-		
+		*/
 		
 		Conversion conversion = new Conversion();
 		DiscretCosTrans dct = new DiscretCosTrans();
@@ -150,7 +151,39 @@ public class Main {
 		}
 		System.out.println("Coefficient AC!");
 		
+		Entropy entropy = new Entropy();
 		
+		for (int i = 0; i < coefficientDC.length; i++) {
+			for (int j = 0; j < coefficientDC[i].length; j++) {
+				entropy.writeDC(coefficientDC[i][j]);
+			}
+		}
+		int runlength = 0;
+		int value = 0;
+		
+		for (int i = 0; i < coefficientAC.length; i++) {
+			for (int j = 0; j < coefficientAC[i].length; j++) {
+				for (int k = 0; k < coefficientAC[i][j].length; k++) {
+					for (int l = 0; l < coefficientAC[i][j][k].length; l++) {
+						
+						if(coefficientAC[i][j][k][l] == null){
+							break;
+						}else if(coefficientAC[i][j][k][l] == "EOB"){
+							runlength = 0;
+							value = 0;
+						}else if(coefficientAC[i][j][k][l] != null){
+							String[] separer = coefficientAC[i][j][k][l].split(",");
+							runlength = Integer.parseInt(separer[0]);
+							value = Integer.parseInt(separer[1]);
+						}
+						entropy.writeAC(runlength, value);
+					}
+				}
+			}
+		}
+		
+		SZLReaderWriter szl = new SZLReaderWriter();
+		szl.writeSZLFile(fichierCompresse, hauteur, largeur, facteurQ);
 		
 		/*
 			for (int j = 0; j < coefficientDC[0].length; j++) {

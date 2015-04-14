@@ -90,39 +90,6 @@ public class DiscretCosTrans {
 		return imageRetour;
 	}
 
-	/*
-	 * public int[][][][][] DCT(int[][] imageEntree){ int Cu; int Cv; int valeur
-	 * = 0; int somme = 0; int[][][][][] imageRetour = new int[3][32][32][8][8];
-	 * 
-	 * for (int couleur = 0; couleur < imageEnBloc.length; couleur++) { for (int
-	 * ligneBloc = 0; ligneBloc < imageEnBloc.length; ligneBloc++) { for (int
-	 * colonneBloc = 0; colonneBloc < imageEnBloc.length; colonneBloc++) { //
-	 * ici, nous avons selectionne le bloc de composante 'couleur' situe a
-	 * lignebloc,colonnebloc // On applique maintenant la dct
-	 * 
-	 * for (int u=0;u<8;u++) { for (int v=0;v<8;v++) {
-	 * 
-	 * if (u == 0) { Cu = (int) (1/(Math.sqrt(2))); } else { Cu = 1; }
-	 * 
-	 * if (v == 0) { Cv = (int) (1/(Math.sqrt(2))); } else { Cv = 1; }
-	 * 
-	 * valeur = (Cu * Cv) / 4;
-	 * 
-	 * for (int ligneDansB = 0; ligneDansB < imageEnBloc.length; ligneDansB++) {
-	 * for (int colonneDansB = 0; colonneDansB < imageEnBloc.length;
-	 * colonneDansB++) {
-	 * 
-	 * somme += (Math.cos((((2 * ligneDansB + 1) * ligneBloc * Math.PI)/16))
-	 * Math.cos((((2 * colonneDansB + 1) * colonneBloc * Math.PI)/16))); } somme
-	 * = somme *
-	 * imageEnBloc[couleur][ligneBloc][colonneBloc][ligneDansB][colonneBloc]; }
-	 * 
-	 * imageRetour[couleur][ligneBloc][colonneBloc][u][v] = valeur * somme;
-	 * 
-	 * } } } } }
-	 * 
-	 * return imageEnBloc; }
-	 */
 
 	public void IDCT() {
 
